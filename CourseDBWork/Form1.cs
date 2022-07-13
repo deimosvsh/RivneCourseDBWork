@@ -56,6 +56,15 @@ namespace CourseDBWork
             if (addForm.DialogResult == DialogResult.OK)
                 dataGridView2.DataSource = ConnDB.TryQuery("select * from dbo.painters");
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            DataTable dtIDHelper = ConnDB.TryQuery(String.Format("select id_painter from painters where painter_name = '{0}'", dataGridView2.Rows[dataGridView2.CurrentCell.RowIndex].Cells[1].Value));
+            AddEx addEx = new AddEx(Int32.Parse(dtIDHelper.Rows[0][0].ToString()));
+            addEx.ShowDialog();
+            if (addEx.DialogResult == DialogResult.OK)
+                dataGridView2.DataSource = ConnDB.TryQuery("select * from dbo.painters");
+        }
     }
 
     public static class ConnDB
