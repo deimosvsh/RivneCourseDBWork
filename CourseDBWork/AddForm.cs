@@ -35,7 +35,6 @@ namespace CourseDBWork
 
             DataTable LoadHelper = ConnDB.TryQuery(String.Format("select * from painters where id_painter = '{0}'", EditableID));
 
-            //if (EditableID > 1)
             {
                 textBox1.Text = LoadHelper.Rows[0][1].ToString();
                 textBox4.Text = LoadHelper.Rows[0][3].ToString();
@@ -88,6 +87,31 @@ namespace CourseDBWork
             textBox4.Clear();
         }
 
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            // додати картину
+            string tmp = textBox1.Text;
+            string formatter = dateTimePicker2.Value.Date.ToString("yyyy-MM-dd");
+            string paintId = "";
+            string techID = "";
+            string typeID = "";
+            foreach (var i in ArtNames)
+                if (i.Value == comboBox1.SelectedItem.ToString()) paintId = i.Key.ToString();
+            foreach (var i in ArtTech)
+                if (i.Value == comboBox2.SelectedItem.ToString()) techID = i.Key.ToString();
+            foreach (var i in ArtStyle)
+                if (i.Value == comboBox3.SelectedItem.ToString()) typeID = i.Key.ToString();
+            ConnDB.TryQuery(String.Format("INSERT INTO[dbo].[painting]([pic_name],[pic_date],[id_painter],[id_tech],[id_type]) VALUES('{0}', '{1}', '{2}', '{3}', '{4}');",
+                                                                     textBox8.Text.Replace("'", "`"), formatter, paintId, techID, typeID));
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void AddForm_Load(object sender, EventArgs e)
         {
             dtArtist = ConnDB.TryQuery("SELECT * FROM [painters]");
@@ -98,21 +122,21 @@ namespace CourseDBWork
                 for (int i = 0; i < dtArtist.Rows.Count; i++)
                 {
                     ArtNames.Add(dtArtist.Rows[i][0].ToString(), dtArtist.Rows[i][1].ToString());
-                    comboBox1.Items.Add(dtArtist.Rows[i][0].ToString() + " " + dtArtist.Rows[i][1].ToString());
+                    comboBox1.Items.Add(dtArtist.Rows[i][1].ToString());
                 }
 
             if (comboBox2.Items.Count <= 0)
                 for (int i = 0; i < dtType.Rows.Count; i++)
                 {
                     ArtStyle.Add(dtType.Rows[i][0].ToString(), dtType.Rows[i][1].ToString());
-                    comboBox2.Items.Add(dtType.Rows[i][0].ToString() + " " + dtType.Rows[i][1].ToString());
+                    comboBox2.Items.Add(dtType.Rows[i][1].ToString());
                 }
 
             if (comboBox3.Items.Count <= 0)
                 for (int i = 0; i < dtTech.Rows.Count; i++)
                 {
                     ArtTech.Add(dtTech.Rows[i][0].ToString(), dtTech.Rows[i][1].ToString());
-                    comboBox3.Items.Add(dtTech.Rows[i][0].ToString() + " " + dtTech.Rows[i][1].ToString());
+                    comboBox3.Items.Add(dtTech.Rows[i][1].ToString());
                 }
 
             comboBox1.SelectedItem = comboBox1.Items[0];
